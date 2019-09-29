@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"github.com/MewX/KanTV-downloader-cli/mewx/kantv"
 )
 
 func main() {
-	fmt.Println("Hello world!")
+	kantv.Cli()
 }
-

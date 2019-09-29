@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["kantv_cli.go"],
+    importpath = "github.com/MewX/KanTV-downloader-cli/mewx/kantv",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "go_default_test",
+    srcs = ["kantv_cli_test.go"],
+    embed = [":go_default_library"],
+)
