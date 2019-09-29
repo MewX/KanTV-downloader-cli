@@ -5,6 +5,7 @@ go_library(
     srcs = ["kantv_cli.go"],
     importpath = "github.com/MewX/KanTV-downloader-cli/mewx/kantv",
     visibility = ["//visibility:public"],
+    deps = ["@urfav_cli//:go_default_library"],
 )
 
 go_test(

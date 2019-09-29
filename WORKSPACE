@@ -24,6 +24,12 @@ http_archive(
     ],
 )
 
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 
 gazelle_dependencies()
+
+go_repository(
+    name = "urfav_cli",
+    commit = "a14d7d367bc02b1f57d88de97926727f2d936387",
+    importpath = "github.com/urfave/cli",
+)
