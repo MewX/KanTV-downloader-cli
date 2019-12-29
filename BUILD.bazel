@@ -1,19 +1,28 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@rules_java//java:defs.bzl", "java_test")
 
-# gazelle:prefix github.com/MewX/KanTV-downloader-cli
-gazelle(name = "gazelle")
-
-go_library(
-    name = "go_default_library",
-    srcs = ["main.go"],
-    importpath = "github.com/MewX/KanTV-downloader-cli",
-    visibility = ["//visibility:private"],
-    deps = ["//mewx/kantv:go_default_library"],
+java_binary(
+    name = "kantv",
+    srcs = glob(["src/main/java/org/mewx/kantv/*.java"]),
+    main_class = "org.mewx.kantv.Kantv",
+    deps = [
+        ":kantv-lib",
+    ],
 )
 
-go_binary(
-    name = "kantv",
-    embed = [":go_default_library"],
-    visibility = ["//visibility:public"],
+java_library(
+    name = "kantv-lib",
+    srcs = glob(["src/main/java/org/mewx/kantv/*.java"]),
+)
+
+java_test(
+    name = "kantv_test",
+    size = "small",
+    srcs = glob(["src/test/java/org/mewx/kantv/*.java"]),
+    test_class = "org.mewx.kantv.AllTests",
+    deps = [
+        "kantv-lib",
+        "@hamcrest_all//jar",
+        "@junit//jar",
+        "@takari_cpsuite//jar",
+    ],
 )

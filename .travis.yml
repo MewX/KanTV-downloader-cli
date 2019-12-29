@@ -15,5 +15,6 @@ before_install:
   - sudo dpkg -i bazel_0.29.1-linux-x86_64.deb
 
 script:
-  - bazel build //...
-  - bazel test //...
+  - sh bazel_build.sh
+  - sh bazel_run.sh
+  - bazel test kantv_test
