@@ -6,12 +6,16 @@ java_binary(
     main_class = "org.mewx.kantv.Kantv",
     deps = [
         ":kantv-lib",
+        "@picocli//jar",
     ],
 )
 
 java_library(
     name = "kantv-lib",
     srcs = glob(["src/main/java/org/mewx/kantv/*.java"]),
+    deps = [
+        "@picocli//jar",
+    ],
 )
 
 java_test(

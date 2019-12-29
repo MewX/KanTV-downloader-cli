@@ -14,3 +14,8 @@ maven_jar(
     name = "takari_cpsuite",
     artifact = "io.takari.junit:takari-cpsuite:jar:1.2.7",
 )
+
+maven_jar(
+    name = "picocli",
+    artifact = "info.picocli:picocli:4.1.4",
+)
