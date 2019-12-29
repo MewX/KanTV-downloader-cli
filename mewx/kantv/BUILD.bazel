@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "go_default_library",
-    srcs = ["kantv_cli.go"],
+    srcs = [
+        "api/*.go",
+        "kantv_cli.go",
+    ],
     importpath = "github.com/MewX/KanTV-downloader-cli/mewx/kantv",
     visibility = ["//visibility:public"],
     deps = ["@urfav_cli//:go_default_library"],

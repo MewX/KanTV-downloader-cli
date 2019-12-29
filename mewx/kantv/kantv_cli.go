@@ -89,6 +89,16 @@ func Cli() {
 				return nil
 			},
 		},
+		{
+			Name:    "play",
+			Aliases: []string{"p", "pl"},
+			Action: func(c *cli.Context) error {
+				// TODO
+				// This option provides the streaming link or link to a local player to play the video directly.
+				fmt.Println("playing...")
+				return nil
+			},
+		},
 	}
 
 	err := app.Run(os.Args)
