@@ -2,7 +2,7 @@ load("@rules_java//java:defs.bzl", "java_test")
 
 java_binary(
     name = "kantv",
-    srcs = glob(["src/main/java/org/mewx/kantv/*.java"]),
+    srcs = glob(["src/main/java/org/mewx/kantv/**/*.java"]),
     main_class = "org.mewx.kantv.Kantv",
     deps = [
         ":kantv-lib",
@@ -12,7 +12,7 @@ java_binary(
 
 java_library(
     name = "kantv-lib",
-    srcs = glob(["src/main/java/org/mewx/kantv/*.java"]),
+    srcs = glob(["src/main/java/org/mewx/kantv/**/*.java"]),
     deps = [
         "@picocli//jar",
     ],
