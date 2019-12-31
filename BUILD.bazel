@@ -6,7 +6,7 @@ java_binary(
     main_class = "org.mewx.kantv.Kantv",
     deps = [
         ":kantv-lib",
-        "@picocli//jar",
+	"@maven//:info_picocli_picocli",
     ],
 )
 
@@ -14,7 +14,7 @@ java_library(
     name = "kantv-lib",
     srcs = glob(["src/main/java/org/mewx/kantv/**/*.java"]),
     deps = [
-        "@picocli//jar",
+	"@maven//:info_picocli_picocli",
     ],
 )
 
@@ -25,8 +25,8 @@ java_test(
     test_class = "org.mewx.kantv.AllTests",
     deps = [
         "kantv-lib",
-        "@hamcrest_all//jar",
-        "@junit//jar",
-        "@takari_cpsuite//jar",
+	"@maven//:junit_junit",
+        "@maven//:org_hamcrest_hamcrest_all",
+        "@maven//:io_takari_junit_takari_cpsuite_jar",
     ],
 )
