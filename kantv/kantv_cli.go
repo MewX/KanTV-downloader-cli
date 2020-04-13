@@ -2,6 +2,7 @@ package kantv
 
 import (
 	"fmt"
+	"github.com/MewX/KanTV-downloader-cli/kantv/api"
 	"github.com/urfave/cli"
 	"log"
 	"os"
@@ -105,4 +106,8 @@ func Cli() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// TODO: delete this stub
+	var s api.Sign
+	fmt.Println(s)
 }
