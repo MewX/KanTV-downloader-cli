@@ -4,9 +4,13 @@ go_library(
     name = "go_default_library",
     srcs = [
         "common.go",
+        "country.go",
         "login.go",
         "request.go",
     ],
     importpath = "github.com/MewX/KanTV-downloader-cli/kantv/api",
     visibility = ["//visibility:public"],
+    deps = [
+        "//kantv/util:go_default_library",
+    ],
 )

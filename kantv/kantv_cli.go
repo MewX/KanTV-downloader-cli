@@ -2,12 +2,14 @@ package kantv
 
 import (
 	"fmt"
-	"github.com/MewX/KanTV-downloader-cli/kantv/api"
-	"github.com/urfave/cli"
 	"log"
 	"os"
+
+	"github.com/MewX/KanTV-downloader-cli/kantv/api"
+	"github.com/urfave/cli"
 )
 
+// Cli is the entry of the command line interface.
 func Cli() {
 	app := cli.NewApp()
 	app.Name = "KanTV Downloader CLI"
@@ -108,6 +110,7 @@ func Cli() {
 	}
 
 	// TODO: delete this stub
-	var s api.Sign
+	s := api.NewSign()
 	fmt.Println(s)
+	api.SendRequest(api.NewGetCountryRequest())
 }
