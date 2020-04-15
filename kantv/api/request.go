@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	urllib "net/url"
+	"strconv"
+	"strings"
 
 	"github.com/MewX/KanTV-downloader-cli/kantv/util"
 )
@@ -25,19 +27,27 @@ type Request interface {
 //}
 
 // SendRequest sends the request to the API server.
-// TODO: should support POST/GET.
 // TODO: should automatically use fallback domains.
 func SendRequest(url string, request urllib.Values) {
 	// session := &http.Client{Transport: &http.Transport{
 	// 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	// }}
 
+	// Generate a new sign.
 	s := NewSign()
 	for k, v := range util.StructToURLValues(&s) {
 		request[k] = v
 	}
+	urlEncodedData := request.Encode()
 
-	response, err := http.PostForm(getDomain()+url, request)
+	client := &http.Client{}
+	// TODO: should support POST/GET.
+	req, _ := http.NewRequest("POST", getDomain()+url, strings.NewReader(urlEncodedData))
+	req.Header.Set("User-Agent", UserAgent)
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(urlEncodedData)))
+
+	response, err := client.Do(req)
 	if err != nil {
 		// TODO: handle postform error
 	}
