@@ -24,7 +24,7 @@ const (
 	UserAgent = "suramic app1.0"
 )
 
-// Sign contains the shard fields for every network request.
+// Sign contains the shared fields for every network request.
 type Sign struct {
 	appid     string
 	noncestr  string // UUID

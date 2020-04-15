@@ -1,5 +1,6 @@
 package api
 
+// TODO: considering change the name of this file to account.go
 type Login struct {
 	Request
 
