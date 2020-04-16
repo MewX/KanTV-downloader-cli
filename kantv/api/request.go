@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	urllib "net/url"
@@ -28,7 +27,7 @@ type Request interface {
 
 // SendRequest sends the request to the API server.
 // TODO: should automatically use fallback domains.
-func SendRequest(url string, request urllib.Values) {
+func SendRequest(url string, request urllib.Values) (string, error) {
 	// session := &http.Client{Transport: &http.Transport{
 	// 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	// }}
@@ -54,11 +53,7 @@ func SendRequest(url string, request urllib.Values) {
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		// TODO: handle read response error
-	}
-
-	fmt.Printf("%s\n", string(body))
+	return string(body), err
 }
 
 // TODO: add test and make this generic

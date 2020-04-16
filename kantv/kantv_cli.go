@@ -1,6 +1,8 @@
 package kantv
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -47,15 +49,38 @@ func Cli() {
 		},
 		cli.StringFlag{
 			Name:  "outdir",
-			Value: "Output directory. File name will be generated based on the resource you are downloading.",
+			Usage: "Output directory. File name will be generated based on the resource you are downloading.",
 		},
 		cli.StringFlag{
 			Name:  "cookies",
-			Value: "Specify the cookies.txt file path.",
+			Usage: "Specify the cookies.txt file path.",
+		},
+		cli.StringFlag{
+			Name:  "iso_code",
+			Value: "AU",
+			Usage: "Specify the country of the account.",
 		},
 	}
 
 	app.Commands = []cli.Command{
+		{
+			Name:  "country",
+			Usage: "Get country list.",
+			Action: func(c *cli.Context) error {
+				var j, err = api.SendRequest(api.NewGetCountryRequest())
+
+				// Print as json.
+				var buf bytes.Buffer
+				json.Indent(&buf, []byte(j), "", "  ")
+				fmt.Println(buf.String())
+
+				// Print as string.
+				var obj map[string]interface{}
+				json.Unmarshal([]byte(j), &obj)
+				fmt.Printf("%+v\n", obj)
+				return err
+			},
+		},
 		{
 			Name:  "register",
 			Usage: "Register a new account.",
@@ -108,9 +133,4 @@ func Cli() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// TODO: delete this stub
-	s := api.NewSign()
-	fmt.Println(s)
-	api.SendRequest(api.NewGetCountryRequest())
 }
