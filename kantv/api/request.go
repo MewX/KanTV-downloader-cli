@@ -1,6 +1,9 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	urllib "net/url"
@@ -27,7 +30,7 @@ type Request interface {
 
 // SendRequest sends the request to the API server.
 // TODO: should automatically use fallback domains.
-func SendRequest(url string, request urllib.Values) (string, error) {
+func SendRequest(url string, request urllib.Values) (map[string]interface{}, error) {
 	// session := &http.Client{Transport: &http.Transport{
 	// 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	// }}
@@ -46,14 +49,29 @@ func SendRequest(url string, request urllib.Values) (string, error) {
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(urlEncodedData)))
 
-	response, err := client.Do(req)
+	// Make HTTP(S) request.
+	resp, err := client.Do(req)
 	if err != nil {
-		// TODO: handle postform error
+		return nil, err
 	}
-	defer response.Body.Close()
+	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(response.Body)
-	return string(body), err
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// Print the received json string when verbose is specified.
+	if util.VerboseMode {
+		var buf bytes.Buffer
+		json.Indent(&buf, []byte(string(body)), "", "  ")
+		fmt.Println(buf.String())
+	}
+
+	// Decode the json string to map.
+	var obj map[string]interface{}
+	json.Unmarshal([]byte(string(body)), &obj)
+	return obj, err
 }
 
 // TODO: add test and make this generic

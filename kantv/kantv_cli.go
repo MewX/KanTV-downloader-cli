@@ -1,13 +1,11 @@
 package kantv
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/MewX/KanTV-downloader-cli/kantv/api"
+	"github.com/MewX/KanTV-downloader-cli/kantv/util"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,7 +19,18 @@ func Cli() {
 			fmt.Println("Interactive CLI be done!")
 			return nil
 		},
+		Before: func(c *cli.Context) error {
+			// Initialise all global flags.
+			util.VerboseMode = c.Bool(FlagVerbose)
+			return nil
+		},
+		// TODO: clear those global flags.
 		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:  FlagVerbose,
+				Usage: "Print all debug information.",
+				Value: false,
+			},
 			&cli.StringFlag{
 				Name:  "email",
 				Usage: "Your email address registered in Kantv website. Alternatively, you could use mobile phone number.",
@@ -62,24 +71,7 @@ func Cli() {
 		},
 
 		Commands: []*cli.Command{
-			{
-				Name:  "country",
-				Usage: "Get country list.",
-				Action: func(c *cli.Context) error {
-					var j, err = api.SendRequest(api.NewGetCountryRequest())
-
-					// Print as json.
-					var buf bytes.Buffer
-					json.Indent(&buf, []byte(j), "", "  ")
-					fmt.Println(buf.String())
-
-					// Print as string.
-					var obj map[string]interface{}
-					json.Unmarshal([]byte(j), &obj)
-					fmt.Printf("%+v\n", obj)
-					return err
-				},
-			},
+			CmdCountry,
 			{
 				Name:  "register",
 				Usage: "Register a new account.",

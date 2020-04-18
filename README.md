@@ -6,6 +6,12 @@ Downloading KanTV via command line interface (CLI)
 
 ## Usage
 
+To view the full help info:
+
+```
+$ kantv --help
+```
+
 ### Get country list
 
 ```
