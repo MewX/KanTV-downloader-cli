@@ -72,6 +72,7 @@ func Cli() {
 
 		Commands: []*cli.Command{
 			CmdCountry,
+			CmdDownload,
 			{
 				Name:  "register",
 				Usage: "Register a new account.",
@@ -96,15 +97,6 @@ func Cli() {
 				Action: func(c *cli.Context) error {
 					// TODO: support those flags - n_thread, user_agent, cache_size, max_parallel, max_download_file
 					fmt.Println("configuring")
-					return nil
-				},
-			},
-			{
-				Name:    "download",
-				Aliases: []string{"d", "dl"},
-				Action: func(c *cli.Context) error {
-					// TODO
-					fmt.Println("downloading")
 					return nil
 				},
 			},

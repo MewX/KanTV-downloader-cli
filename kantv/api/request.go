@@ -79,6 +79,7 @@ func SendRequest(request Request) (map[string]interface{}, error) {
 	if util.VerboseMode {
 		var buf bytes.Buffer
 		json.Indent(&buf, []byte(string(body)), "", "  ")
+		fmt.Println("==== Raw Received Json ====")
 		fmt.Println(buf.String())
 	}
 
