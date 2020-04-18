@@ -4,7 +4,20 @@
 
 本版本封装的是 看TV Android 客户端的API。
 
+## 编译方式
+
+请事先下载好最新版 Bazel 编译套件：
+https://docs.bazel.build/versions/master/install.html
+
+然后执行：
+
+```
+$ bazel build :kantv
+```
+
 ## 使用方式
+
+如果不想编译，请直接到 [Release区](https://github.com/MewX/KanTV-downloader-cli/releases) 下载最新版使用。
 
 查看完整用法的命令：
 
