@@ -13,10 +13,23 @@ import (
 	"github.com/MewX/KanTV-downloader-cli/kantv/util"
 )
 
-// Request is the 'generic' type for all network requests.
-type Request interface {
-	Decode(b []byte)
-	Encode(r Request) []byte
+// RequestType is expected to be an enum type for HTTP request types.
+type RequestType string
+
+// Here defines the possible request types.
+const (
+	POST RequestType = "POST"
+	GET  RequestType = "GET"
+)
+
+// Request should the 'generic' type for all network requests.
+type Request struct {
+	rtype       RequestType
+	relativeURL string
+	body        urllib.Values
+
+	// Decode(b []byte)
+	// Encode(r Request) []byte
 }
 
 // TODO
@@ -30,21 +43,22 @@ type Request interface {
 
 // SendRequest sends the request to the API server.
 // TODO: should automatically use fallback domains.
-func SendRequest(url string, request urllib.Values) (map[string]interface{}, error) {
+func SendRequest(request Request) (map[string]interface{}, error) {
 	// session := &http.Client{Transport: &http.Transport{
 	// 	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	// }}
 
 	// Generate a new sign.
+	data := request.body
 	s := NewSign()
 	for k, v := range util.StructToURLValues(&s) {
-		request[k] = v
+		data[k] = v
 	}
-	urlEncodedData := request.Encode()
+	urlEncodedData := data.Encode()
 
 	client := &http.Client{}
 	// TODO: should support POST/GET.
-	req, _ := http.NewRequest("POST", getDomain()+url, strings.NewReader(urlEncodedData))
+	req, _ := http.NewRequest(string(request.rtype), getDomain()+request.relativeURL, strings.NewReader(urlEncodedData))
 	req.Header.Set("User-Agent", UserAgent)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Content-Length", strconv.Itoa(len(urlEncodedData)))
