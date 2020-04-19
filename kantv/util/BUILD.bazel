@@ -4,6 +4,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "config.go",
+        "file.go",
         "net.go",
         "struct.go",
     ],
@@ -13,6 +14,9 @@ go_library(
 
 go_test(
     name = "go_default_test",
-    srcs = ["net_test.go"],
+    srcs = [
+        "file_test.go",
+        "net_test.go",
+    ],
     embed = [":go_default_library"],
 )

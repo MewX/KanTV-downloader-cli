@@ -6,6 +6,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
+	"strconv"
 
 	"github.com/MewX/KanTV-downloader-cli/kantv/api"
 	"github.com/MewX/KanTV-downloader-cli/kantv/util"
@@ -83,11 +87,16 @@ var CmdDownload = &cli.Command{
 			Name:  FlagTvid,
 			Usage: "Specify the tvid of the video to download.",
 		},
+		&cli.StringFlag{
+			Name:  FlagOutDir,
+			Usage: "Specify the output dir.",
+		},
 	},
 	Action: func(c *cli.Context) error {
 		// Must specify at least one of tvid or video URL.
 		url := c.String(FlagURL)
 		tvid := c.String(FlagTvid)
+		outdir := c.String(FlagOutDir)
 		if url == "" && tvid == "" {
 			return fmt.Errorf("you must specify at least one of tvid or video URL")
 		}
@@ -118,9 +127,11 @@ var CmdDownload = &cli.Command{
 		// Print results.
 		data := obj["data"].(map[string]interface{})
 		generalInfo := data["info"].(map[string]interface{})
+		videoTitle := generalInfo["title"].(string)
 		playInfo := data["playinfo"].(map[string]interface{})
+		partID := int(playInfo["part"].(float64))
 		m3u8URL := playInfo["url"].(string)
-		fmt.Printf("Downloading: %s...\n", generalInfo["title"].(string))
+		fmt.Printf("Downloading: %s...\n", videoTitle)
 		fmt.Printf("Will download from this link: %s\n", m3u8URL)
 
 		// Generate base URL.
@@ -158,12 +169,65 @@ var CmdDownload = &cli.Command{
 			return fmt.Errorf("please report this error, the server returns a Master playlist")
 		}
 
+		// Download all videos.
+		// TODO(#8): Need to refactor this codes. Allow specifying file name.
+		var wd string
+		if outdir == "" {
+			// Using working directory by default.
+			wd, err = os.Getwd()
+			if err != nil {
+				return err
+			}
+		} else {
+			wd = outdir
+			_ = os.MkdirAll(wd, 0744)
+		}
+		// TODO(#8): Added support for part ID. They should be saved in the same folder.
+		folderName := util.SanitizeFileName(videoTitle)
+		_ = os.Mkdir(path.Join(wd, folderName), 0744)
+
+		fmt.Println("Saving all files to folder: " + folderName)
 		playlist := p.(*m3u8.MediaPlaylist)
-		for _, segment := range playlist.Segments {
+		for i, segment := range playlist.Segments {
 			if segment != nil {
-				fmt.Println("Will download: " + baseURL + segment.URI)
+				fullURL := baseURL + segment.URI
+				if util.VerboseMode {
+					fmt.Println("\nDownloading from: " + fullURL)
+				}
+
+				startPercentage := float64(i) / float64(len(playlist.Segments)) * 100.0
+				finishPercentage := float64(i+1) / float64(len(playlist.Segments)) * 100.0
+				fileName := strconv.Itoa(partID) + "-" + util.SanitizeFileName(segment.URI)
+				filePath := path.Join(wd, folderName, fileName)
+				fileInfo, errStat := os.Stat(filePath)
+				fmt.Printf("\r(%.2f%%) Downloading: %s", startPercentage, fileName)
+				if errStat != nil && os.IsNotExist(errStat) {
+					// Need to download.
+					fmt.Printf("\r(%.2f%%) Downloading: %s", finishPercentage, fileName)
+					b, e := util.FetchLinkContentWithRetry(fullURL)
+					if e != nil {
+						return fmt.Errorf("unable to download %s even after %d times of retry",
+							fullURL, util.RetryTimes)
+					}
+					err := ioutil.WriteFile(filePath, b, 0744)
+					if err != nil {
+						return err
+					}
+				} else if errStat != nil {
+					return errStat
+				} else if fileInfo.IsDir() {
+					return fmt.Errorf("file name is taken by a dir: %s", filePath)
+				} else {
+					// Downloaded already. Do nothing here.
+				}
+			} else {
+				// Should be an exception?
+				if util.VerboseMode {
+					fmt.Printf("Saw a nil segment at index: %d\n", i)
+				}
 			}
 		}
+		fmt.Println()
 		return nil
 	},
 }

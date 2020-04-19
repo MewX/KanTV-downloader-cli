@@ -5,4 +5,5 @@ const (
 	FlagVerbose = "verbose"
 	FlagURL     = "url"
 	FlagTvid    = "tvid"
+	FlagOutDir  = "outdir"
 )

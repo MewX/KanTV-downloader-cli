@@ -7,6 +7,19 @@ import (
 	"strings"
 )
 
+// FetchLinkContentWithRetry downloads the link content to variable in memory with retry.
+func FetchLinkContentWithRetry(url string) ([]byte, error) {
+	var b []byte
+	var e error
+	for i := 0; i < RetryTimes; i++ {
+		b, e = FetchLinkContent(url)
+		if e == nil {
+			return b, e
+		}
+	}
+	return b, e
+}
+
 // FetchLinkContent downloads the link content to variable in memory.
 func FetchLinkContent(url string) ([]byte, error) {
 	// Just get it!
