@@ -13,11 +13,11 @@ type GetVideoInfoRequest struct {
 }
 
 // NewGetVideoInfoRequest creates the new request object.
-func NewGetVideoInfoRequest(tvid string) Request {
+func NewGetVideoInfoRequest(tvid string, partid string) Request {
 	req := GetVideoInfoRequest{
 		_token:  util.UserToken,
 		tvid:    tvid,
-		part_id: "",
+		part_id: partid,
 	}
 	return Request{
 		rtype:       POST,

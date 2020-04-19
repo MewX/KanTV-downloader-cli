@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -55,4 +56,24 @@ func ExtractM3u8BaseURL(url string) (string, error) {
 		fmt.Printf("Extracted base URL is %s\n", baseURL)
 	}
 	return baseURL, nil
+}
+
+// ExtractTvidPartidFromURL extracts the IDs.
+func ExtractTvidPartidFromURL(url string) (string, string, error) {
+	// Try one without part ID.
+	re := regexp.MustCompile(".+?/(tvdrama|anime|movie)/(\\d+)")
+	match := re.FindStringSubmatch(url)
+	if len(match) != 3 {
+		return "", "", fmt.Errorf("url is not supported; if you believe this is an error, pleaser file an issue")
+	}
+	tvid := match[2]
+
+	// Try one with part ID.
+	re = regexp.MustCompile(".+?/(tvdrama|anime|movie)/(\\d+?)-(\\d+)")
+	match = re.FindStringSubmatch(url)
+	partid := ""
+	if len(match) == 4 {
+		partid = match[3]
+	}
+	return tvid, partid, nil
 }

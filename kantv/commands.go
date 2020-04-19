@@ -88,6 +88,10 @@ var CmdDownload = &cli.Command{
 			Usage: "Specify the tvid of the video to download.",
 		},
 		&cli.StringFlag{
+			Name:  FlagPartid,
+			Usage: "Specify the partid of the video to download.",
+		},
+		&cli.StringFlag{
 			Name:  FlagOutDir,
 			Usage: "Specify the output dir.",
 		},
@@ -96,6 +100,7 @@ var CmdDownload = &cli.Command{
 		// Must specify at least one of tvid or video URL.
 		url := c.String(FlagURL)
 		tvid := c.String(FlagTvid)
+		partid := c.String(FlagPartid)
 		outdir := c.String(FlagOutDir)
 		if url == "" && tvid == "" {
 			return fmt.Errorf("you must specify at least one of tvid or video URL")
@@ -108,17 +113,16 @@ var CmdDownload = &cli.Command{
 
 		// URL is specified
 		if url != "" {
-			fmt.Println("Working in progress")
-			// TODO: need to extract and set tvid from URL
-			// If unable to extract, through an error as well!
-
-			// Here are some examples:
-			// https://www.wekan.tv/tvdrama/302014371619001
-			// https://www.wekan.tv/movie/302002655075001
+			var err error
+			tvid, partid, err = util.ExtractTvidPartidFromURL(url)
+			if err != nil {
+				return err
+			}
+			fmt.Printf("Parsed tvid: %s; partid: %s\n", tvid, partid)
 		}
 
 		// Tvid is specified
-		var obj, err = api.SendRequest(api.NewGetVideoInfoRequest(tvid))
+		var obj, err = api.SendRequest(api.NewGetVideoInfoRequest(tvid, partid))
 		err = checkError(err, obj)
 		if err != nil {
 			return err
