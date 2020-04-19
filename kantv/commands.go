@@ -123,6 +123,12 @@ var CmdDownload = &cli.Command{
 		fmt.Printf("Downloading: %s...\n", generalInfo["title"].(string))
 		fmt.Printf("Will download from this link: %s\n", m3u8URL)
 
+		// Generate base URL.
+		baseURL, errBaseURL := util.ExtractM3u8BaseURL(m3u8URL)
+		if errBaseURL != nil {
+			return errBaseURL
+		}
+
 		// Download m3u8 playlist.
 		b, errM3u8 := util.FetchLinkContent(m3u8URL)
 		if errM3u8 != nil {
@@ -150,6 +156,13 @@ var CmdDownload = &cli.Command{
 		// Expect to receive Media Playlist.
 		if listType != m3u8.MEDIA {
 			return fmt.Errorf("please report this error, the server returns a Master playlist")
+		}
+
+		playlist := p.(*m3u8.MediaPlaylist)
+		for _, segment := range playlist.Segments {
+			if segment != nil {
+				fmt.Println("Will download: " + baseURL + segment.URI)
+			}
 		}
 		return nil
 	},
