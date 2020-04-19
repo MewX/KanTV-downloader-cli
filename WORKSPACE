@@ -59,3 +59,10 @@ go_repository(
     sum = "h1:PdmoCO6wvbs+7yrJyMORt4/BmY5IYyJwS/kOiWx8mHo=",
     version = "v1.0.0",
 )
+
+go_repository(
+    name = "m3u8",
+    importpath = "github.com/grafov/m3u8",
+    sum = "h1:igZ7EBIB2IAsPPazKwRKdbhxcoBKO3lO1UY57PZDeNA=",
+    version = "v0.11.1",
+)

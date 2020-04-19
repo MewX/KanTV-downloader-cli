@@ -4,6 +4,7 @@ go_library(
     name = "go_default_library",
     srcs = [
         "config.go",
+        "net.go",
         "struct.go",
     ],
     importpath = "github.com/MewX/KanTV-downloader-cli/kantv/util",

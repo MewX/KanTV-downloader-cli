@@ -17,3 +17,7 @@
 # bazel outputs
 /bazel-*
 .ijwb/
+
+# Video files.
+*.m3u8
+*.ts

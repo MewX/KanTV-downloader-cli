@@ -3,11 +3,13 @@ package kantv
 // TODO(#22): refactor those json parser codes into a neat and easy way.
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 
 	"github.com/MewX/KanTV-downloader-cli/kantv/api"
 	"github.com/MewX/KanTV-downloader-cli/kantv/util"
+	"github.com/grafov/m3u8"
 	"github.com/urfave/cli/v2"
 )
 
@@ -117,10 +119,38 @@ var CmdDownload = &cli.Command{
 		data := obj["data"].(map[string]interface{})
 		generalInfo := data["info"].(map[string]interface{})
 		playInfo := data["playinfo"].(map[string]interface{})
+		m3u8URL := playInfo["url"].(string)
 		fmt.Printf("Downloading: %s...\n", generalInfo["title"].(string))
-		fmt.Printf("Will download from this link: %s\n", playInfo["url"].(string))
+		fmt.Printf("Will download from this link: %s\n", m3u8URL)
 
-		// TODO(#8): add download logic and allow specify output dir (allow creating).
+		// Download m3u8 playlist.
+		b, errM3u8 := util.FetchLinkContent(m3u8URL)
+		if errM3u8 != nil {
+			return errM3u8
+		}
+
+		// Decode the m3u8 playlist.
+		p, listType, errPlaylist := m3u8.DecodeFrom(bytes.NewReader(b), true)
+		if errPlaylist != nil {
+			return errPlaylist
+		}
+
+		// Download the video files.
+		if util.VerboseMode {
+			switch listType {
+			case m3u8.MEDIA:
+				mediapl := p.(*m3u8.MediaPlaylist)
+				fmt.Printf("MediaPL:\n%+v\n", mediapl)
+			case m3u8.MASTER:
+				masterpl := p.(*m3u8.MasterPlaylist)
+				fmt.Printf("MasterPL:\n%+v\n", masterpl)
+			}
+		}
+
+		// Expect to receive Media Playlist.
+		if listType != m3u8.MEDIA {
+			return fmt.Errorf("please report this error, the server returns a Master playlist")
+		}
 		return nil
 	},
 }
