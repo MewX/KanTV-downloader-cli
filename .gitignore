@@ -21,3 +21,6 @@
 # Video files.
 *.m3u8
 *.ts
+
+# Release folders.
+release/

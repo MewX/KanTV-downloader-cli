@@ -7,6 +7,7 @@ addons:
     packages:
       - wget
       - pkg-config
+      - gcc-arm-linux-gnueabi
 
 before_install:
   - wget https://github.com/bazelbuild/bazel/releases/download/3.0.0/bazel_3.0.0-linux-x86_64.deb
@@ -17,3 +18,4 @@ before_install:
 script:
   - bazel build //...
   - bazel test //...
+  - sh release.sh
