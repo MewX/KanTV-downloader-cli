@@ -13,7 +13,7 @@ import (
 func Cli() {
 	app := &cli.App{
 		Name:    "KanTV Downloader CLI",
-		Version: "0.1.0",
+		Version: "0.2.0",
 		Usage:   "The downloader for downloading KanTV videos via command line.",
 		Action: func(c *cli.Context) error {
 			fmt.Println("Interactive CLI be done!")
