@@ -40,7 +40,7 @@ $ kantv download --url <video_URL>
 
 # 例子：
 $ kantv download --url https://www.wekan.tv/movie/302002655075001
-$ bazel run :kantv -- download --url https://www.wekan.tv/tvdrama/301930368997001-161930368997002 --outdir ~/downloads
+$ kantv download --url https://www.wekan.tv/tvdrama/301930368997001-161930368997002 --outdir ~/downloads
 ```
 
 指定 `--outdir ...` 可以自定义下载位置。
