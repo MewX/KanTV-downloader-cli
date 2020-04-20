@@ -189,6 +189,9 @@ var CmdDownload = &cli.Command{
 		// TODO(#8): Added support for part ID. They should be saved in the same folder.
 		folderName := util.SanitizeFileName(videoTitle)
 		_ = os.Mkdir(path.Join(wd, folderName), 0744)
+		if util.VerboseMode {
+			fmt.Println(path.Join(wd, folderName))
+		}
 
 		fmt.Println("Saving all files to folder: " + folderName)
 		playlist := p.(*m3u8.MediaPlaylist)

@@ -12,6 +12,7 @@
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
+temp/
 *.out
 
 # bazel outputs
