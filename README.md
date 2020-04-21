@@ -1,6 +1,7 @@
 # 看TV 命令行版 视频（电影/电视剧）下载器
 
 [![Build Status](https://travis-ci.com/MewX/KanTV-downloader-cli.svg?branch=master)](https://travis-ci.com/MewX/KanTV-downloader-cli)
+[![GitHub Action CI](https://github.com/MewX/KanTV-downloader-cli/workflows/CI/badge.svg?branch=master)](https://github.com/MewX/KanTV-downloader-cli/actions?query=workflow%3ACI)
 
 本版本封装的是 看TV Android 客户端的API。
 
