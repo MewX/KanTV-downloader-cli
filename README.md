@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.com/MewX/KanTV-downloader-cli.svg?branch=master)](https://travis-ci.com/MewX/KanTV-downloader-cli)
 [![GitHub Action CI](https://github.com/MewX/KanTV-downloader-cli/workflows/CI/badge.svg?branch=master)](https://github.com/MewX/KanTV-downloader-cli/actions?query=workflow%3ACI)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2FKanTV-downloader-cli.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2FKanTV-downloader-cli?ref=badge_shield)
 
 本版本封装的是 看TV Android 客户端的API。
 
@@ -67,3 +68,7 @@ $ kantv download --tvid 301930368997001 --partid 161930368997002 --outdir ~/Down
 ```
 
 目前版本视频没有合并，有的播放器可以通过m3u8播放。 下一个版本将合并成一个ts文件。
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMewX%2FKanTV-downloader-cli.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMewX%2FKanTV-downloader-cli?ref=badge_large)
