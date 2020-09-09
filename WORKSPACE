@@ -89,4 +89,9 @@ go_repository(
     version = "v0.11.0",
 )
 
+load("//:deps.bzl", "go_dependencies")
+
+# gazelle:repository_macro deps.bzl%go_dependencies
+go_dependencies()
+
 gazelle_dependencies()
